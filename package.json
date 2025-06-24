@@ -1,0 +1,8 @@
+{
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "exceljs": "^4.4.0",
+    "jest": "^30.0.2",
+    "ts-node": "^10.9.2"
+  }
+}

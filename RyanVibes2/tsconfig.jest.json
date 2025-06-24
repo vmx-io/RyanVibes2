@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "outDir": "./dist-jest"
+  },
+  "include": [
+    "src/app/scheduleParser.ts",
+    "src/app/scheduleParser.test.ts"
+  ]
+} 
