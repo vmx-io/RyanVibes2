@@ -24,10 +24,11 @@ interface CalendarDay {
   template: `
     <div class="calendar-container" *ngIf="employee">
       <div class="calendar-header">
-        <h2>{{ employee.firstName }} {{ employee.lastName }} - {{ getMonthYearString() }}</h2>
+        <h2>{{ employee.firstName }} {{ employee.lastName }}</h2>
+        <div class="month-year">{{ getMonthYearString() }}</div>
         <div class="calendar-nav">
-          <button (click)="previousMonth()" class="nav-btn">&lt;</button>
-          <button (click)="nextMonth()" class="nav-btn">&gt;</button>
+          <button (click)="previousMonth()" class="nav-btn" aria-label="Previous month">&lt;</button>
+          <button (click)="nextMonth()" class="nav-btn" aria-label="Next month">&gt;</button>
         </div>
       </div>
       
@@ -97,32 +98,50 @@ interface CalendarDay {
     
     .calendar-header {
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
       align-items: center;
       margin-bottom: 2rem;
+      text-align: center;
     }
     
     .calendar-header h2 {
-      margin: 0;
+      margin: 0 0 0.5rem 0;
       color: #333;
+      font-size: 1.5rem;
+    }
+    
+    .month-year {
+      font-size: 1.2rem;
+      color: #666;
+      margin-bottom: 1rem;
     }
     
     .calendar-nav {
       display: flex;
-      gap: 0.5rem;
+      gap: 1rem;
     }
     
     .nav-btn {
-      padding: 8px 12px;
+      padding: 12px 16px;
       border: 1px solid #ddd;
       background: white;
-      border-radius: 6px;
+      border-radius: 8px;
       cursor: pointer;
-      font-size: 16px;
+      font-size: 18px;
+      min-width: 44px;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.3s;
     }
     
     .nav-btn:hover {
       background: #f8f9fa;
+    }
+    
+    .nav-btn:active {
+      background: #e9ecef;
     }
     
     .calendar-grid {
@@ -136,19 +155,22 @@ interface CalendarDay {
     
     .day-header {
       background: #f8f9fa;
-      padding: 1rem;
+      padding: 0.75rem 0.5rem;
       text-align: center;
       font-weight: 600;
       color: #495057;
       border-bottom: 1px solid #dee2e6;
+      font-size: 0.9rem;
     }
     
     .calendar-day {
       background: white;
-      min-height: 100px;
+      min-height: 80px;
       padding: 0.5rem;
       position: relative;
       border: 1px solid #e9ecef;
+      display: flex;
+      flex-direction: column;
     }
     
     .calendar-day.other-month {
@@ -178,32 +200,40 @@ interface CalendarDay {
     
     .day-number {
       font-weight: 600;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.25rem;
       color: #333;
+      font-size: 0.9rem;
     }
     
     .shift-info {
-      font-size: 0.8rem;
+      font-size: 0.7rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
     }
     
     .shift-time {
       font-weight: 600;
       color: #007bff;
-      margin-bottom: 0.25rem;
+      margin-bottom: 0.1rem;
+      line-height: 1.2;
     }
     
     .shift-hours {
       color: #28a745;
       font-weight: 500;
+      font-size: 0.65rem;
     }
     
     .shift-type {
       font-weight: 600;
-      margin-top: 0.25rem;
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-size: 0.7rem;
+      margin-top: 0.1rem;
+      padding: 1px 4px;
+      border-radius: 3px;
+      font-size: 0.6rem;
       text-align: center;
+      align-self: flex-start;
     }
     
     .sick-leave .shift-type {
@@ -229,23 +259,24 @@ interface CalendarDay {
     .calendar-legend {
       display: flex;
       flex-wrap: wrap;
-      gap: 1rem;
+      gap: 0.75rem;
       margin-top: 2rem;
       padding-top: 1rem;
       border-top: 1px solid #dee2e6;
+      justify-content: center;
     }
     
     .legend-item {
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      font-size: 0.9rem;
+      font-size: 0.8rem;
     }
     
     .legend-color {
-      width: 20px;
-      height: 20px;
-      border-radius: 4px;
+      width: 16px;
+      height: 16px;
+      border-radius: 3px;
       border: 1px solid #dee2e6;
     }
     
@@ -267,6 +298,216 @@ interface CalendarDay {
     
     .legend-color.training {
       background: #fff3e0;
+    }
+    
+    /* Mobile Styles */
+    @media (max-width: 768px) {
+      .calendar-container {
+        margin-top: 1rem;
+        padding: 1rem;
+        border-radius: 8px;
+      }
+      
+      .calendar-header h2 {
+        font-size: 1.3rem;
+      }
+      
+      .month-year {
+        font-size: 1rem;
+      }
+      
+      .nav-btn {
+        padding: 10px 14px;
+        font-size: 16px;
+        min-width: 40px;
+        min-height: 40px;
+      }
+      
+      .day-header {
+        padding: 0.5rem 0.25rem;
+        font-size: 0.8rem;
+      }
+      
+      .calendar-day {
+        min-height: 70px;
+        padding: 0.25rem;
+      }
+      
+      .day-number {
+        font-size: 0.8rem;
+      }
+      
+      .shift-info {
+        font-size: 0.65rem;
+      }
+      
+      .shift-time {
+        font-size: 0.65rem;
+        line-height: 1.1;
+      }
+      
+      .shift-hours {
+        font-size: 0.6rem;
+      }
+      
+      .shift-type {
+        font-size: 0.55rem;
+        padding: 1px 3px;
+      }
+      
+      .calendar-legend {
+        gap: 0.5rem;
+        margin-top: 1.5rem;
+      }
+      
+      .legend-item {
+        font-size: 0.75rem;
+      }
+      
+      .legend-color {
+        width: 14px;
+        height: 14px;
+      }
+    }
+    
+    /* Small Mobile Styles */
+    @media (max-width: 480px) {
+      .calendar-container {
+        padding: 0.75rem;
+        margin: 0.5rem;
+      }
+      
+      .calendar-header {
+        margin-bottom: 1.5rem;
+      }
+      
+      .calendar-header h2 {
+        font-size: 1.2rem;
+      }
+      
+      .month-year {
+        font-size: 0.9rem;
+      }
+      
+      .nav-btn {
+        padding: 8px 12px;
+        font-size: 14px;
+        min-width: 36px;
+        min-height: 36px;
+      }
+      
+      .day-header {
+        padding: 0.4rem 0.2rem;
+        font-size: 0.75rem;
+      }
+      
+      .calendar-day {
+        min-height: 60px;
+        padding: 0.2rem;
+      }
+      
+      .day-number {
+        font-size: 0.75rem;
+      }
+      
+      .shift-info {
+        font-size: 0.6rem;
+      }
+      
+      .shift-time {
+        font-size: 0.6rem;
+      }
+      
+      .shift-hours {
+        font-size: 0.55rem;
+      }
+      
+      .shift-type {
+        font-size: 0.5rem;
+        padding: 1px 2px;
+      }
+      
+      .calendar-legend {
+        gap: 0.4rem;
+        margin-top: 1rem;
+      }
+      
+      .legend-item {
+        font-size: 0.7rem;
+      }
+      
+      .legend-color {
+        width: 12px;
+        height: 12px;
+      }
+    }
+    
+    /* Extra Small Mobile Styles */
+    @media (max-width: 360px) {
+      .calendar-container {
+        padding: 0.5rem;
+        margin: 0.25rem;
+      }
+      
+      .calendar-header h2 {
+        font-size: 1.1rem;
+      }
+      
+      .month-year {
+        font-size: 0.85rem;
+      }
+      
+      .nav-btn {
+        padding: 6px 10px;
+        font-size: 12px;
+        min-width: 32px;
+        min-height: 32px;
+      }
+      
+      .day-header {
+        padding: 0.3rem 0.15rem;
+        font-size: 0.7rem;
+      }
+      
+      .calendar-day {
+        min-height: 55px;
+        padding: 0.15rem;
+      }
+      
+      .day-number {
+        font-size: 0.7rem;
+      }
+      
+      .shift-info {
+        font-size: 0.55rem;
+      }
+      
+      .shift-time {
+        font-size: 0.55rem;
+      }
+      
+      .shift-hours {
+        font-size: 0.5rem;
+      }
+      
+      .shift-type {
+        font-size: 0.45rem;
+        padding: 1px 2px;
+      }
+      
+      .calendar-legend {
+        gap: 0.3rem;
+        margin-top: 0.75rem;
+      }
+      
+      .legend-item {
+        font-size: 0.65rem;
+      }
+      
+      .legend-color {
+        width: 10px;
+        height: 10px;
+      }
     }
   `]
 })

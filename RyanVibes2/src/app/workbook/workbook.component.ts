@@ -68,11 +68,13 @@ import { CalendarComponent } from '../calendar/calendar.component';
     h1 {
       color: #333;
       margin-bottom: 0.5rem;
+      font-size: 2rem;
     }
     
     p {
       color: #666;
       margin-bottom: 2rem;
+      font-size: 1rem;
     }
     
     .employee-selector {
@@ -84,6 +86,7 @@ import { CalendarComponent } from '../calendar/calendar.component';
       margin-bottom: 0.5rem;
       font-weight: 500;
       color: #333;
+      font-size: 1rem;
     }
     
     .employee-dropdown {
@@ -94,6 +97,7 @@ import { CalendarComponent } from '../calendar/calendar.component';
       border-radius: 6px;
       font-size: 16px;
       background: white;
+      min-height: 44px;
     }
     
     .employee-dropdown:focus {
@@ -109,8 +113,16 @@ import { CalendarComponent } from '../calendar/calendar.component';
       border-radius: 8px;
     }
     
+    .employee-details h3 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+      color: #333;
+      font-size: 1.3rem;
+    }
+    
     .employee-info p {
       margin: 0.5rem 0;
+      font-size: 1rem;
     }
     
     .no-data {
@@ -119,19 +131,25 @@ import { CalendarComponent } from '../calendar/calendar.component';
       color: #666;
     }
     
+    .no-data p {
+      margin-bottom: 1rem;
+    }
+    
     .actions {
       margin-top: 2rem;
       text-align: center;
     }
     
     .btn-primary, .btn-secondary {
-      padding: 10px 20px;
+      padding: 12px 24px;
       border: none;
       border-radius: 6px;
       cursor: pointer;
       font-size: 16px;
       margin: 0 0.5rem;
       transition: background-color 0.3s;
+      min-height: 44px;
+      min-width: 120px;
     }
     
     .btn-primary {
@@ -143,6 +161,10 @@ import { CalendarComponent } from '../calendar/calendar.component';
       background: #0056b3;
     }
     
+    .btn-primary:active {
+      background: #004085;
+    }
+    
     .btn-secondary {
       background: #6c757d;
       color: white;
@@ -150,6 +172,192 @@ import { CalendarComponent } from '../calendar/calendar.component';
     
     .btn-secondary:hover {
       background: #545b62;
+    }
+    
+    .btn-secondary:active {
+      background: #3d4449;
+    }
+    
+    /* Mobile Styles */
+    @media (max-width: 768px) {
+      .workbook-container {
+        margin: 1rem;
+        padding: 1.5rem;
+        border-radius: 8px;
+      }
+      
+      h1 {
+        font-size: 1.5rem;
+        text-align: center;
+      }
+      
+      p {
+        font-size: 0.9rem;
+        text-align: center;
+      }
+      
+      .employee-selector {
+        margin: 1.5rem 0;
+      }
+      
+      label {
+        font-size: 0.9rem;
+        text-align: center;
+      }
+      
+      .employee-dropdown {
+        max-width: 100%;
+        font-size: 16px; /* Prevents zoom on iOS */
+        padding: 10px;
+      }
+      
+      .employee-details {
+        margin-top: 1.5rem;
+        padding: 1rem;
+      }
+      
+      .employee-details h3 {
+        font-size: 1.2rem;
+        text-align: center;
+      }
+      
+      .employee-info p {
+        font-size: 0.9rem;
+        text-align: center;
+      }
+      
+      .no-data {
+        padding: 1.5rem;
+      }
+      
+      .no-data p {
+        font-size: 0.9rem;
+      }
+      
+      .actions {
+        margin-top: 1.5rem;
+      }
+      
+      .btn-primary, .btn-secondary {
+        padding: 10px 20px;
+        font-size: 14px;
+        min-width: 100px;
+        margin: 0.25rem;
+      }
+    }
+    
+    /* Small Mobile Styles */
+    @media (max-width: 480px) {
+      .workbook-container {
+        margin: 0.5rem;
+        padding: 1rem;
+      }
+      
+      h1 {
+        font-size: 1.3rem;
+      }
+      
+      p {
+        font-size: 0.85rem;
+      }
+      
+      .employee-selector {
+        margin: 1rem 0;
+      }
+      
+      label {
+        font-size: 0.85rem;
+      }
+      
+      .employee-dropdown {
+        padding: 8px;
+        font-size: 16px;
+      }
+      
+      .employee-details {
+        margin-top: 1rem;
+        padding: 0.75rem;
+      }
+      
+      .employee-details h3 {
+        font-size: 1.1rem;
+      }
+      
+      .employee-info p {
+        font-size: 0.85rem;
+      }
+      
+      .no-data {
+        padding: 1rem;
+      }
+      
+      .no-data p {
+        font-size: 0.85rem;
+      }
+      
+      .btn-primary, .btn-secondary {
+        padding: 8px 16px;
+        font-size: 13px;
+        min-width: 90px;
+        margin: 0.2rem;
+      }
+    }
+    
+    /* Extra Small Mobile Styles */
+    @media (max-width: 360px) {
+      .workbook-container {
+        margin: 0.25rem;
+        padding: 0.75rem;
+      }
+      
+      h1 {
+        font-size: 1.2rem;
+      }
+      
+      p {
+        font-size: 0.8rem;
+      }
+      
+      .employee-selector {
+        margin: 0.75rem 0;
+      }
+      
+      label {
+        font-size: 0.8rem;
+      }
+      
+      .employee-dropdown {
+        padding: 6px;
+        font-size: 16px;
+      }
+      
+      .employee-details {
+        margin-top: 0.75rem;
+        padding: 0.5rem;
+      }
+      
+      .employee-details h3 {
+        font-size: 1rem;
+      }
+      
+      .employee-info p {
+        font-size: 0.8rem;
+      }
+      
+      .no-data {
+        padding: 0.75rem;
+      }
+      
+      .no-data p {
+        font-size: 0.8rem;
+      }
+      
+      .btn-primary, .btn-secondary {
+        padding: 6px 12px;
+        font-size: 12px;
+        min-width: 80px;
+        margin: 0.15rem;
+      }
     }
   `]
 })
