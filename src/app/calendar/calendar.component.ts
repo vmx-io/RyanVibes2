@@ -95,6 +95,8 @@ interface CalendarDay {
 export class CalendarComponent implements OnInit, OnChanges {
   @Input() employee: Employee | null = null;
   @Input() isFavourite: boolean = false;
+  @Input() initialMonth: number | null = null;
+  @Input() initialYear: number | null = null;
   @Output() toggleFavourite = new EventEmitter<void>();
   
   calendarDays: CalendarDay[] = [];
@@ -102,6 +104,9 @@ export class CalendarComponent implements OnInit, OnChanges {
   weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
   ngOnInit(): void {
+    if (this.initialMonth !== null && this.initialYear !== null) {
+      this.currentDate = new Date(this.initialYear, this.initialMonth, 1);
+    }
     this.generateCalendar();
   }
 

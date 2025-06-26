@@ -53,6 +53,8 @@ import { CookieService } from '../cookie.service';
           [employee]="selectedEmployee"
           [isFavourite]="selectedEmployee && isFavourite(selectedEmployee.id)"
           (toggleFavourite)="toggleFavourite()"
+          [initialMonth]="scheduleMonth"
+          [initialYear]="scheduleYear"
         ></app-calendar>
       </div>
     </div>
@@ -66,6 +68,8 @@ export class WorkbookComponent implements OnInit {
   favouriteIds: string[] = [];
   favouriteEmployees: Employee[] = [];
   otherEmployees: Employee[] = [];
+  scheduleMonth: number | null = null;
+  scheduleYear: number | null = null;
 
   constructor(
     private employeeService: EmployeeService,
@@ -82,6 +86,8 @@ export class WorkbookComponent implements OnInit {
         this.router.navigate(['/']);
       }
       this.splitEmployees();
+      this.scheduleMonth = this.employeeService.getScheduleMonth();
+      this.scheduleYear = this.employeeService.getScheduleYear();
     });
   }
 

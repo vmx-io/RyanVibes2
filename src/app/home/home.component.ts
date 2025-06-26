@@ -100,6 +100,7 @@ export class HomeComponent {
         
         // Store employees in service
         this.employeeService.setEmployees(employees);
+        this.employeeService.setScheduleMonthYear(month, year);
         
         // Navigate to workbook page
         this.router.navigate(['/workbook']);

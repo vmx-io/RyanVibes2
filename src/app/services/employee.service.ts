@@ -30,10 +30,26 @@ export class EmployeeService {
   private employeesSubject = new BehaviorSubject<Employee[]>([]);
   public employees$ = this.employeesSubject.asObservable();
 
+  private scheduleMonth: number | null = null;
+  private scheduleYear: number | null = null;
+
   constructor() {}
 
   setEmployees(employees: Employee[]): void {
     this.employeesSubject.next(employees);
+  }
+
+  setScheduleMonthYear(month: number, year: number): void {
+    this.scheduleMonth = month;
+    this.scheduleYear = year;
+  }
+
+  getScheduleMonth(): number | null {
+    return this.scheduleMonth;
+  }
+
+  getScheduleYear(): number | null {
+    return this.scheduleYear;
   }
 
   getEmployees(): Employee[] {
