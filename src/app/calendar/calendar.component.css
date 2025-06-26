@@ -1,0 +1,432 @@
+/* --- Modern Animated Gradient Background with Subtle Pattern Overlay --- */
+body, .calendar-bg {
+  min-height: 100vh;
+  min-width: 100vw;
+  margin: 0;
+  padding: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -2;
+  overflow: hidden;
+  /* Animated gradient */
+  background: linear-gradient(120deg, #e0e7ff, #f0fdfa, #fef9c3, #fbcfe8, #e0e7ff);
+  background-size: 400% 400%;
+  animation: gradientMove 18s ease-in-out infinite;
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+body::before, .calendar-bg::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none;
+  /* Subtle diagonal lines SVG pattern overlay */
+  background: url('data:image/svg+xml;utf8,<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="0" y1="40" x2="40" y2="0" stroke="%23ffffff" stroke-width="1" stroke-opacity="0.08"/><line x1="-10" y1="30" x2="30" y2="-10" stroke="%23ffffff" stroke-width="1" stroke-opacity="0.08"/><line x1="10" y1="50" x2="50" y2="10" stroke="%23ffffff" stroke-width="1" stroke-opacity="0.08"/></svg>');
+  background-repeat: repeat;
+  background-size: 40px 40px;
+}
+
+/* --- Keep the strong glassmorphism for the calendar container --- */
+.calendar-container {
+  margin-top: 2rem;
+  background: rgba(255,255,255,0.60);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 12px 48px 0 rgba(31,38,135,0.13), 0 2px 16px 0 rgba(255,255,255,0.12) inset;
+  border: 2px solid rgba(255,255,255,0.35);
+  border-top: 2px solid rgba(255,255,255,0.8);
+  border-left: 2px solid rgba(255,255,255,0.6);
+  backdrop-filter: blur(32px) saturate(200%);
+  -webkit-backdrop-filter: blur(32px) saturate(200%);
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 100vw;
+  box-sizing: border-box;
+}
+
+.calendar-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.calendar-header h2 {
+  margin: 0 0 0.5rem 0;
+  color: #333;
+  font-size: 1.5rem;
+}
+
+.month-year {
+  font-size: 1.2rem;
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.calendar-nav {
+  display: flex;
+  gap: 1rem;
+}
+
+.nav-btn {
+  padding: 12px 16px;
+  border: 1px solid #ddd;
+  background: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 18px;
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s;
+}
+
+.nav-btn:hover {
+  background: #f8f9fa;
+}
+
+.nav-btn:active {
+  background: #e9ecef;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+  background: #e9ecef;
+  border-radius: 8px;
+  overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: auto;
+}
+
+.day-header {
+  background: #f8f9fa;
+  padding: 0.75rem 0.5rem;
+  text-align: center;
+  font-weight: 600;
+  color: #495057;
+  border-bottom: 1px solid #dee2e6;
+  font-size: 0.9rem;
+}
+
+.calendar-day {
+  background: white;
+  min-height: 80px;
+  padding: 0.5rem;
+  position: relative;
+  border: 1px solid #e9ecef;
+  display: flex;
+  flex-direction: column;
+}
+
+.calendar-day.other-month {
+  background: #f8f9fa;
+  color: #adb5bd;
+}
+
+.calendar-day.has-shift {
+  background: #e3f2fd;
+}
+
+.calendar-day.sick-leave {
+  background: #ffebee;
+}
+
+.calendar-day.training {
+  background: #fff3e0;
+}
+
+.calendar-day.vacation {
+  background: #e8f5e8;
+}
+
+.calendar-day.night-shift {
+  background: #f3e5f5;
+}
+
+.day-number {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: #333;
+  font-size: 0.9rem;
+}
+
+.shift-info {
+  font-size: 0.7rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.shift-time {
+  font-weight: 600;
+  color: #007bff;
+  margin-bottom: 0.1rem;
+  line-height: 1.2;
+}
+
+.shift-hours {
+  color: #28a745;
+  font-weight: 500;
+  font-size: 0.65rem;
+}
+
+.shift-type {
+  font-weight: 600;
+  margin-top: 0.1rem;
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-size: 0.6rem;
+  text-align: center;
+  align-self: flex-start;
+}
+
+.sick-leave .shift-type {
+  background: #dc3545;
+  color: white;
+}
+
+.training .shift-type {
+  background: #fd7e14;
+  color: white;
+}
+
+.vacation .shift-type {
+  background: #28a745;
+  color: white;
+}
+
+.night-shift .shift-type {
+  background: #6f42c1;
+  color: white;
+}
+
+.calendar-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #dee2e6;
+  justify-content: center;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.legend-color {
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  border: 1px solid #dee2e6;
+}
+
+.legend-color.regular {
+  background: #e3f2fd;
+}
+
+.legend-color.night-shift {
+  background: #f3e5f5;
+}
+
+.legend-color.vacation {
+  background: #e8f5e8;
+}
+
+.legend-color.sick-leave {
+  background: #ffebee;
+}
+
+.legend-color.training {
+  background: #fff3e0;
+}
+
+@media (max-width: 768px) {
+  .calendar-container {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 8px;
+  }
+  .calendar-header h2 {
+    font-size: 1.3rem;
+  }
+  .month-year {
+    font-size: 1rem;
+  }
+  .nav-btn {
+    padding: 10px 14px;
+    font-size: 16px;
+    min-width: 40px;
+    min-height: 40px;
+  }
+  .day-header {
+    padding: 0.5rem 0.25rem;
+    font-size: 0.8rem;
+  }
+  .calendar-day {
+    min-height: 70px;
+    padding: 0.25rem;
+  }
+  .day-number {
+    font-size: 0.8rem;
+  }
+  .shift-info {
+    font-size: 0.65rem;
+  }
+  .shift-time {
+    font-size: 0.65rem;
+    line-height: 1.1;
+  }
+  .shift-hours {
+    font-size: 0.6rem;
+  }
+  .shift-type {
+    font-size: 0.55rem;
+    padding: 1px 3px;
+  }
+  .calendar-legend {
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+  }
+  .legend-item {
+    font-size: 0.75rem;
+  }
+  .legend-color {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .calendar-container {
+    padding: 0.75rem;
+    margin: 0.5rem;
+  }
+  .calendar-header {
+    margin-bottom: 1.5rem;
+  }
+  .calendar-header h2 {
+    font-size: 1.2rem;
+  }
+  .month-year {
+    font-size: 0.9rem;
+  }
+  .nav-btn {
+    padding: 8px 12px;
+    font-size: 14px;
+    min-width: 36px;
+    min-height: 36px;
+  }
+  .day-header {
+    padding: 0.4rem 0.2rem;
+    font-size: 0.75rem;
+  }
+  .calendar-day {
+    min-height: 60px;
+    padding: 0.2rem;
+  }
+  .day-number {
+    font-size: 0.75rem;
+  }
+  .shift-info {
+    font-size: 0.6rem;
+  }
+  .shift-time {
+    font-size: 0.6rem;
+  }
+  .shift-hours {
+    font-size: 0.55rem;
+  }
+  .shift-type {
+    font-size: 0.5rem;
+    padding: 1px 2px;
+  }
+  .calendar-legend {
+    gap: 0.4rem;
+    margin-top: 1rem;
+  }
+  .legend-item {
+    font-size: 0.7rem;
+  }
+  .legend-color {
+    width: 12px;
+    height: 12px;
+  }
+}
+
+@media (max-width: 360px) {
+  .calendar-container {
+    padding: 0.5rem;
+    margin: 0.25rem;
+  }
+  .calendar-header h2 {
+    font-size: 1.1rem;
+  }
+  .month-year {
+    font-size: 0.85rem;
+  }
+  .nav-btn {
+    padding: 6px 10px;
+    font-size: 12px;
+    min-width: 32px;
+    min-height: 32px;
+  }
+  .day-header {
+    padding: 0.3rem 0.15rem;
+    font-size: 0.7rem;
+  }
+  .calendar-day {
+    min-height: 55px;
+    padding: 0.15rem;
+  }
+  .day-number {
+    font-size: 0.7rem;
+  }
+  .shift-info {
+    font-size: 0.55rem;
+  }
+  .shift-time {
+    font-size: 0.55rem;
+  }
+  .shift-hours {
+    font-size: 0.5rem;
+  }
+  .shift-type {
+    font-size: 0.45rem;
+    padding: 1px 2px;
+  }
+  .calendar-legend {
+    gap: 0.3rem;
+    margin-top: 0.75rem;
+  }
+  .legend-item {
+    font-size: 0.65rem;
+  }
+  .legend-color {
+    width: 10px;
+    height: 10px;
+  }
+} 

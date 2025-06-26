@@ -10,7 +10,7 @@ import { CalendarComponent } from '../calendar/calendar.component';
   standalone: true,
   imports: [CommonModule, FormsModule, CalendarComponent],
   template: `
-    <div class="workbook-container">
+    <div class="workbook-container gradient-bg">
       <div class="employee-selector">
         <select 
           id="employeeSelect" 

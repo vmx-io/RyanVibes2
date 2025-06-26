@@ -19,10 +19,11 @@
   user-select: none;
 }
 .employee-selector {
-  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 .employee-dropdown {
   width: 100%;
@@ -109,4 +110,43 @@
   background: none;
   box-shadow: none;
   padding: 0;
+}
+:host {
+  min-height: 100vh;
+  display: block;
+  background: #fff;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+}
+
+/* Gradient background for the first workbook-container only */
+.gradient-bg {
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  background: linear-gradient(120deg, #e0e7ff, #f0fdfa, #fef9c3, #fbcfe8, #e0e7ff);
+  background-size: 400% 400%;
+  animation: gradientMove 18s ease-in-out infinite;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.gradient-bg::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+  background: url('data:image/svg+xml;utf8,<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="0" y1="40" x2="40" y2="0" stroke="%23ffffff" stroke-width="1" stroke-opacity="0.08"/><line x1="-10" y1="30" x2="30" y2="-10" stroke="%23ffffff" stroke-width="1" stroke-opacity="0.08"/><line x1="10" y1="50" x2="50" y2="10" stroke="%23ffffff" stroke-width="1" stroke-opacity="0.08"/></svg>');
+  background-repeat: repeat;
+  background-size: 40px 40px;
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 } 
