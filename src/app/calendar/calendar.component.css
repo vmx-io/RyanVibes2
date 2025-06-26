@@ -63,6 +63,7 @@ body::before, .calendar-bg::before {
   align-items: center;
   margin-bottom: 2rem;
   text-align: center;
+  position: relative;
 }
 
 .calendar-header h2 {
@@ -262,6 +263,32 @@ body::before, .calendar-bg::before {
 
 .legend-color.training {
   background: #fff3e0;
+}
+
+.btn-favourite-calendar {
+  position: absolute;
+  top: 0.5rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  color: #fbbf24;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: background 0.2s;
+  z-index: 2;
+}
+
+.btn-favourite-calendar:hover {
+  background: #fffbe6;
+}
+
+.btn-favourite-calendar span {
+  font-size: 2rem;
+  line-height: 1;
+  display: inline-block;
 }
 
 @media (max-width: 768px) {

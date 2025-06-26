@@ -41,10 +41,6 @@ import { CookieService } from '../cookie.service';
             </optgroup>
           </ng-container>
         </select>
-        <button *ngIf="selectedEmployee" (click)="toggleFavourite()" class="btn-favourite">
-          <span *ngIf="isFavourite(selectedEmployee.id)">★ Remove from Favourites</span>
-          <span *ngIf="!isFavourite(selectedEmployee.id)">☆ Add to Favourites</span>
-        </button>
       </div>
       <div *ngIf="!employees.length" class="no-data">
         <p>No employee data available. Please upload a file first.</p>
@@ -53,7 +49,11 @@ import { CookieService } from '../cookie.service';
     </div>
     <div *ngIf="selectedEmployee" class="workbook-container calendar-full-width">
       <div class="calendar-container">
-        <app-calendar [employee]="selectedEmployee"></app-calendar>
+        <app-calendar 
+          [employee]="selectedEmployee"
+          [isFavourite]="selectedEmployee && isFavourite(selectedEmployee.id)"
+          (toggleFavourite)="toggleFavourite()"
+        ></app-calendar>
       </div>
     </div>
   `,

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Employee } from '../services/employee.service';
 
@@ -30,6 +30,9 @@ interface CalendarDay {
           <button (click)="previousMonth()" class="nav-btn" aria-label="Previous month">&lt;</button>
           <button (click)="nextMonth()" class="nav-btn" aria-label="Next month">&gt;</button>
         </div>
+        <button *ngIf="employee" (click)="toggleFavourite.emit()" class="btn-favourite-calendar" aria-label="Toggle favourite">
+          <span>{{ isFavourite ? '★' : '☆' }}</span>
+        </button>
       </div>
       
       <div class="calendar-grid">
@@ -91,6 +94,8 @@ interface CalendarDay {
 })
 export class CalendarComponent implements OnInit, OnChanges {
   @Input() employee: Employee | null = null;
+  @Input() isFavourite: boolean = false;
+  @Output() toggleFavourite = new EventEmitter<void>();
   
   calendarDays: CalendarDay[] = [];
   currentDate = new Date();
