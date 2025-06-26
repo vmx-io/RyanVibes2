@@ -29,11 +29,9 @@ const MONTH_MAP: Record<string, number> = {
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="upload-container">
-      <h1>Schedule Parser</h1>
-      <p>Upload your Excel file to parse employee schedules</p>
-      
-      <div class="file-upload">
+    <div class="glass-bg">
+      <div class="center-container">
+        <div class="fancy-title">Hello! ✈️</div>
         <input 
           type="file" 
           (change)="handleFileInput($event)" 
@@ -41,295 +39,34 @@ const MONTH_MAP: Record<string, number> = {
           id="fileInput"
           #fileInput
         />
-        <label for="fileInput" class="upload-button">
-          <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-            <polyline points="7,10 12,15 17,10"/>
-            <line x1="12" y1="15" x2="12" y2="3"/>
+        <label for="fileInput" class="upload-circle">
+          <svg class="upload-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="24" cy="24" r="22" stroke="currentColor" stroke-width="2" fill="none"/>
+            <polyline points="16,26 24,18 32,26" stroke="currentColor" stroke-width="2" fill="none"/>
+            <line x1="24" y1="18" x2="24" y2="34" stroke="currentColor" stroke-width="2"/>
           </svg>
-          Choose Excel File
         </label>
-      </div>
-      
-      <div *ngIf="error" class="error-message">
-        <svg class="error-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="10"/>
-          <line x1="15" y1="9" x2="9" y2="15"/>
-          <line x1="9" y1="9" x2="15" y2="15"/>
-        </svg>
-        Error: {{error}}
-      </div>
-      
-      <div *ngIf="isProcessing" class="processing">
-        <svg class="processing-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="10" stroke-dasharray="31.416" stroke-dashoffset="31.416">
-            <animate attributeName="stroke-dasharray" dur="2s" values="0 31.416;15.708 15.708;0 31.416" repeatCount="indefinite"/>
-            <animate attributeName="stroke-dashoffset" dur="2s" values="0;-15.708;-31.416" repeatCount="indefinite"/>
-          </circle>
-        </svg>
-        Processing file...
+        <div *ngIf="error" class="error-message">
+          <svg class="error-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="15" y1="9" x2="9" y2="15"/>
+            <line x1="9" y1="9" x2="15" y2="15"/>
+          </svg>
+          Error: {{error}}
+        </div>
+        <div *ngIf="isProcessing" class="processing">
+          <svg class="processing-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10" stroke-dasharray="31.416" stroke-dashoffset="31.416">
+              <animate attributeName="stroke-dasharray" dur="2s" values="0 31.416;15.708 15.708;0 31.416" repeatCount="indefinite"/>
+              <animate attributeName="stroke-dashoffset" dur="2s" values="0;-15.708;-31.416" repeatCount="indefinite"/>
+            </circle>
+          </svg>
+          Processing file...
+        </div>
       </div>
     </div>
   `,
-  styles: [`
-    .upload-container {
-      max-width: 600px;
-      margin: 2rem auto;
-      padding: 2rem;
-      text-align: center;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    
-    h1 {
-      color: #333;
-      margin-bottom: 0.5rem;
-      font-size: 2rem;
-    }
-    
-    p {
-      color: #666;
-      margin-bottom: 2rem;
-      font-size: 1rem;
-    }
-    
-    .file-upload {
-      margin: 2rem 0;
-    }
-    
-    input[type="file"] {
-      display: none;
-    }
-    
-    .upload-button {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 16px 32px;
-      background: #007bff;
-      color: white;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-size: 1rem;
-      font-weight: 500;
-      min-height: 44px;
-      border: none;
-      box-shadow: 0 2px 4px rgba(0, 123, 255, 0.2);
-    }
-    
-    .upload-button:hover {
-      background: #0056b3;
-      transform: translateY(-1px);
-      box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
-    }
-    
-    .upload-button:active {
-      background: #004085;
-      transform: translateY(0);
-      box-shadow: 0 2px 4px rgba(0, 123, 255, 0.2);
-    }
-    
-    .upload-icon {
-      width: 20px;
-      height: 20px;
-    }
-    
-    .error-message {
-      color: #dc3545;
-      background: #f8d7da;
-      border: 1px solid #f5c6cb;
-      padding: 1rem;
-      border-radius: 8px;
-      margin-top: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 0.9rem;
-    }
-    
-    .error-icon {
-      width: 18px;
-      height: 18px;
-      flex-shrink: 0;
-    }
-    
-    .processing {
-      color: #0066cc;
-      margin-top: 1rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      font-size: 0.9rem;
-    }
-    
-    .processing-icon {
-      width: 18px;
-      height: 18px;
-      flex-shrink: 0;
-    }
-    
-    /* Mobile Styles */
-    @media (max-width: 768px) {
-      .upload-container {
-        margin: 1rem;
-        padding: 1.5rem;
-        border-radius: 8px;
-      }
-      
-      h1 {
-        font-size: 1.5rem;
-      }
-      
-      p {
-        font-size: 0.9rem;
-      }
-      
-      .file-upload {
-        margin: 1.5rem 0;
-      }
-      
-      .upload-button {
-        padding: 14px 24px;
-        font-size: 0.9rem;
-        width: 100%;
-        max-width: 300px;
-        justify-content: center;
-      }
-      
-      .upload-icon {
-        width: 18px;
-        height: 18px;
-      }
-      
-      .error-message {
-        padding: 0.75rem;
-        font-size: 0.85rem;
-        margin-top: 0.75rem;
-      }
-      
-      .error-icon {
-        width: 16px;
-        height: 16px;
-      }
-      
-      .processing {
-        font-size: 0.85rem;
-        margin-top: 0.75rem;
-      }
-      
-      .processing-icon {
-        width: 16px;
-        height: 16px;
-      }
-    }
-    
-    /* Small Mobile Styles */
-    @media (max-width: 480px) {
-      .upload-container {
-        margin: 0.5rem;
-        padding: 1rem;
-      }
-      
-      h1 {
-        font-size: 1.3rem;
-      }
-      
-      p {
-        font-size: 0.85rem;
-      }
-      
-      .file-upload {
-        margin: 1rem 0;
-      }
-      
-      .upload-button {
-        padding: 12px 20px;
-        font-size: 0.85rem;
-        max-width: 280px;
-      }
-      
-      .upload-icon {
-        width: 16px;
-        height: 16px;
-      }
-      
-      .error-message {
-        padding: 0.5rem;
-        font-size: 0.8rem;
-        margin-top: 0.5rem;
-      }
-      
-      .error-icon {
-        width: 14px;
-        height: 14px;
-      }
-      
-      .processing {
-        font-size: 0.8rem;
-        margin-top: 0.5rem;
-      }
-      
-      .processing-icon {
-        width: 14px;
-        height: 14px;
-      }
-    }
-    
-    /* Extra Small Mobile Styles */
-    @media (max-width: 360px) {
-      .upload-container {
-        margin: 0.25rem;
-        padding: 0.75rem;
-      }
-      
-      h1 {
-        font-size: 1.2rem;
-      }
-      
-      p {
-        font-size: 0.8rem;
-      }
-      
-      .file-upload {
-        margin: 0.75rem 0;
-      }
-      
-      .upload-button {
-        padding: 10px 16px;
-        font-size: 0.8rem;
-        max-width: 260px;
-      }
-      
-      .upload-icon {
-        width: 14px;
-        height: 14px;
-      }
-      
-      .error-message {
-        padding: 0.4rem;
-        font-size: 0.75rem;
-        margin-top: 0.4rem;
-      }
-      
-      .error-icon {
-        width: 12px;
-        height: 12px;
-      }
-      
-      .processing {
-        font-size: 0.75rem;
-        margin-top: 0.4rem;
-      }
-      
-      .processing-icon {
-        width: 12px;
-        height: 12px;
-      }
-    }
-  `]
+  styleUrls: ['./home.component.css'],
 })
 export class HomeComponent {
   error: string | null = null;

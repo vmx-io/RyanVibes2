@@ -6,17 +6,9 @@ import { RouterOutlet } from '@angular/router';
   standalone: true,
   imports: [RouterOutlet],
   template: `
-    <div class="app-container">
-      <router-outlet />
-    </div>
+    <router-outlet />
   `,
-  styles: [`
-    .app-container {
-      min-height: 100vh;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      padding: 1rem;
-    }
-  `]
+  styles: []
 })
 export class AppComponent {
   title = 'RyanVibes2';
