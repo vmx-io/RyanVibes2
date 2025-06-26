@@ -456,4 +456,10 @@ body::before, .calendar-bg::before {
     width: 10px;
     height: 10px;
   }
+}
+
+@media (max-width: 600px) {
+  .btn-favourite-calendar span {
+    font-size: 1.2rem;
+  }
 } 
