@@ -128,16 +128,15 @@ interface CalendarDay {
         >
           <div class="day-number">{{ day.dayNumber }}</div>
           <div class="shift-info" *ngIf="day.shift">
-            <div class="shift-time" *ngIf="day.shift.start && day.shift.end">
-              {{ day.shift.start }} - {{ day.shift.end }}
+            <div class="shift-start-time" *ngIf="day.shift.start">
+              {{ day.shift.start }}
             </div>
-            <div class="shift-hours" *ngIf="day.shift.hours > 0">
-              {{ day.shift.hours }}h
+            <div class="shift-end-time" *ngIf="day.shift.end">
+              {{ day.shift.end }}
             </div>
             <div class="shift-type" *ngIf="day.shift.isSickLeave">L4</div>
             <div class="shift-type" *ngIf="day.shift.isTraining">SZK</div>
             <div class="shift-type" *ngIf="day.shift.isVacation">URL</div>
-            <div class="shift-type" *ngIf="day.shift.isNightShift">NOC</div>
           </div>
         </div>
       </div>
