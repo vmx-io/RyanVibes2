@@ -1,6 +1,6 @@
 import { Component, OnInit, OnChanges, SimpleChanges, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Employee, EmployeeService } from '../services/employee.service';
 import { DayPopupComponent } from '../day-popup/day-popup.component';
@@ -144,7 +144,7 @@ interface CalendarDay {
 
       <!-- Bottom Tab Bar -->
       <nav class="tab-bar">
-        <button class="tab-item active">
+        <button class="tab-item active" (click)="goToToday()">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
             <line x1="16" y1="2" x2="16" y2="6"/>
@@ -153,20 +153,11 @@ interface CalendarDay {
           </svg>
           <span>Today</span>
         </button>
-        <button class="tab-item">
+        <button class="tab-item" (click)="openGithub()">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-            <line x1="16" y1="2" x2="16" y2="6"/>
-            <line x1="8" y1="2" x2="8" y2="6"/>
-            <line x1="3" y1="10" x2="21" y2="10"/>
+            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
           </svg>
-          <span>Calendars</span>
-        </button>
-        <button class="tab-item">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M22 2H2v16h20V2zM2 22l4-4h16"/>
-          </svg>
-          <span>Inbox</span>
+          <span>Github</span>
         </button>
       </nav>
 
@@ -200,6 +191,7 @@ export class MobileCalendarComponent implements OnInit, OnChanges {
 
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     private employeeService: EmployeeService,
     public deviceService: DeviceService,
     private cookieService: CookieService
@@ -207,6 +199,17 @@ export class MobileCalendarComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.favouriteNames = this.getFavouritesFromCookie();
+    
+    // Check for query parameters (when switching from popup)
+    this.route.queryParams.subscribe(params => {
+      if (params['employeeId']) {
+        this.selectedEmployeeId = params['employeeId'];
+      }
+      if (params['month'] && params['year']) {
+        this.currentDate = new Date(parseInt(params['year']), parseInt(params['month']), 1);
+      }
+    });
+    
     this.employeeService.getEmployeesObservable().subscribe(employees => {
       this.employees = employees;
       if (employees.length > 0 && !this.selectedEmployeeId) {
@@ -217,19 +220,27 @@ export class MobileCalendarComponent implements OnInit, OnChanges {
         this.selectedEmployee = this.employee;
         this.selectedEmployeeId = this.employee.id;
       }
+      
+      // Set selected employee from query params if available
+      if (this.selectedEmployeeId) {
+        this.selectedEmployee = employees.find(emp => emp.id === this.selectedEmployeeId) || null;
+      }
+      
       this.favouriteEmployees = employees.filter(emp => this.favouriteNames.includes(this.getEmployeeFullName(emp)));
       this.otherEmployees = employees.filter(emp => !this.favouriteNames.includes(this.getEmployeeFullName(emp)));
     });
     
-    // Get month and year from service (from uploaded file)
-    const scheduleMonth = this.employeeService.getScheduleMonth();
-    const scheduleYear = this.employeeService.getScheduleYear();
-    
-    if (scheduleMonth !== null && scheduleYear !== null) {
-      this.currentDate = new Date(scheduleYear, scheduleMonth, 1);
-    } else if (this.initialMonth !== null && this.initialYear !== null) {
-      // Fallback to input properties if service doesn't have data
-      this.currentDate = new Date(this.initialYear, this.initialMonth, 1);
+    // Get month and year from service (from uploaded file) - only if not set by query params
+    if (!this.route.snapshot.queryParams['month']) {
+      const scheduleMonth = this.employeeService.getScheduleMonth();
+      const scheduleYear = this.employeeService.getScheduleYear();
+      
+      if (scheduleMonth !== null && scheduleYear !== null) {
+        this.currentDate = new Date(scheduleYear, scheduleMonth, 1);
+      } else if (this.initialMonth !== null && this.initialYear !== null) {
+        // Fallback to input properties if service doesn't have data
+        this.currentDate = new Date(this.initialYear, this.initialMonth, 1);
+      }
     }
     
     this.generateCalendar();
@@ -404,5 +415,26 @@ export class MobileCalendarComponent implements OnInit, OnChanges {
   get isFavourite(): boolean {
     if (!this.selectedEmployee) return false;
     return this.favouriteNames.includes(this.getEmployeeFullName(this.selectedEmployee));
+  }
+
+  goToToday(): void {
+    const today = new Date();
+    this.currentDate = new Date(today.getFullYear(), today.getMonth(), 1);
+    this.generateCalendar();
+    
+    // Find today's day in the calendar and open popup
+    const todayDay = this.calendarDays.find(day => 
+      day.date.getDate() === today.getDate() &&
+      day.date.getMonth() === today.getMonth() &&
+      day.date.getFullYear() === today.getFullYear()
+    );
+    
+    if (todayDay) {
+      this.selectDay(todayDay);
+    }
+  }
+
+  openGithub(): void {
+    window.open('https://github.com/vmx-io', '_blank');
   }
 } 

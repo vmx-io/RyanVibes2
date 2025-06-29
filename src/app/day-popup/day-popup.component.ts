@@ -1,7 +1,9 @@
 import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Employee, EmployeeService } from '../services/employee.service';
+import { CookieService } from '../cookie.service';
 
 interface CalendarDay {
   date: Date;
@@ -112,12 +114,28 @@ interface EmployeeShift {
 
           <!-- Employees List -->
           <div class="employees-section" *ngIf="day?.shift?.start && filteredEmployees.length > 0">
-            <h3 class="section-title">Employees ({{ filteredEmployees.length }})</h3>
+            <div class="employees-header">
+              <h3 class="section-title">Employees ({{ filteredEmployees.length }})</h3>
+              <div class="sort-toggle">
+                <label class="toggle-label">
+                  <input 
+                    type="checkbox" 
+                    [(ngModel)]="sortFavouritesFirst"
+                    (change)="onSortToggleChange()"
+                    class="toggle-input"
+                  >
+                  <span class="toggle-slider"></span>
+                  <span class="toggle-text">Favourites first</span>
+                </label>
+              </div>
+            </div>
             <div class="employees-list">
               <div 
-                *ngFor="let empShift of filteredEmployees" 
+                *ngFor="let empShift of sortedEmployees" 
                 class="employee-item"
                 [class.current-employee]="empShift.employee.id === selectedEmployeeId"
+                [class.favourite-employee]="isFavourite(empShift.employee)"
+                (click)="onEmployeeClick(empShift.employee)"
               >
                 <div class="employee-info">
                   <div class="employee-name">{{ empShift.employee.firstName }} {{ empShift.employee.lastName }}</div>
@@ -145,6 +163,23 @@ interface EmployeeShift {
         </div>
       </div>
     </div>
+
+    <!-- Switch Employee Confirmation Popup -->
+    <div class="confirmation-overlay" *ngIf="showSwitchConfirmation">
+      <div class="confirmation-popup">
+        <div class="confirmation-header">
+          <h3>Switch to Employee Calendar?</h3>
+        </div>
+        <div class="confirmation-content">
+          <p>Do you want to switch to <strong>{{ employeeToSwitch?.firstName }} {{ employeeToSwitch?.lastName }}</strong>'s calendar?</p>
+          <p class="confirmation-note">This will close the current view and show their schedule.</p>
+        </div>
+        <div class="confirmation-actions">
+          <button class="btn-cancel" (click)="cancelSwitch()">Cancel</button>
+          <button class="btn-confirm" (click)="confirmSwitch()">Switch</button>
+        </div>
+      </div>
+    </div>
   `,
   styleUrls: ['./day-popup.component.css']
 })
@@ -157,6 +192,10 @@ export class DayPopupComponent implements OnChanges {
   filteredEmployees: EmployeeShift[] = [];
   selectedRange: string = '0';
   customHours: number = 1;
+  favouriteNames: string[] = [];
+  sortFavouritesFirst: boolean = false;
+  showSwitchConfirmation: boolean = false;
+  employeeToSwitch: Employee | null = null;
 
   timeRanges = [
     { label: '±3h', value: '3' },
@@ -166,7 +205,12 @@ export class DayPopupComponent implements OnChanges {
     { label: 'Custom', value: 'custom' }
   ];
 
-  constructor(private employeeService: EmployeeService) {
+  constructor(
+    private employeeService: EmployeeService,
+    private cookieService: CookieService,
+    private router: Router
+  ) {
+    this.favouriteNames = this.getFavouritesFromCookie();
     this.employeeService.getEmployeesObservable().subscribe(employees => {
       this.employees = employees;
       this.filterEmployees();
@@ -273,5 +317,64 @@ export class DayPopupComponent implements OnChanges {
     if (minutes > 0) text += ` ${minutes}m`;
     
     return difference > 0 ? `+${text}` : `-${text}`;
+  }
+
+  getFavouritesFromCookie(): string[] {
+    const cookie = this.cookieService.get('favouriteEmployees');
+    if (!cookie) return [];
+    try {
+      return JSON.parse(cookie);
+    } catch {
+      return [];
+    }
+  }
+
+  getEmployeeFullName(employee: Employee): string {
+    return `${employee.firstName} ${employee.lastName}`;
+  }
+
+  isFavourite(employee: Employee): boolean {
+    return this.favouriteNames.includes(this.getEmployeeFullName(employee));
+  }
+
+  onSortToggleChange(): void {
+    this.filterEmployees();
+  }
+
+  get sortedEmployees(): EmployeeShift[] {
+    if (!this.filteredEmployees.length) return [];
+
+    const favourites = this.filteredEmployees.filter(emp => this.isFavourite(emp.employee));
+    const others = this.filteredEmployees.filter(emp => !this.isFavourite(emp.employee));
+
+    if (this.sortFavouritesFirst) {
+      return [...favourites, ...others];
+    } else {
+      return [...others, ...favourites];
+    }
+  }
+
+  onEmployeeClick(employee: Employee): void {
+    this.employeeToSwitch = employee;
+    this.showSwitchConfirmation = true;
+  }
+
+  confirmSwitch(): void {
+    if (this.employeeToSwitch) {
+      // Close all popups and navigate to mobile calendar with the selected employee
+      this.closePopup.emit();
+      this.router.navigate(['/mobile-calendar'], { 
+        queryParams: { 
+          employeeId: this.employeeToSwitch.id,
+          month: this.day?.date.getMonth(),
+          year: this.day?.date.getFullYear()
+        }
+      });
+    }
+  }
+
+  cancelSwitch(): void {
+    this.showSwitchConfirmation = false;
+    this.employeeToSwitch = null;
   }
 } 

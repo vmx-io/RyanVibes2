@@ -229,31 +229,124 @@
   padding: 20px;
 }
 
+.employees-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.sort-toggle {
+  display: flex;
+  align-items: center;
+}
+
+.toggle-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 14px;
+  color: #979797;
+  gap: 8px;
+}
+
+.toggle-input {
+  display: none;
+}
+
+.toggle-slider {
+  position: relative;
+  width: 40px;
+  height: 20px;
+  background-color: #1A1A1A;
+  border-radius: 10px;
+  transition: background-color 0.3s;
+  border: 1px solid #333;
+}
+
+.toggle-slider::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  background-color: #979797;
+  border-radius: 50%;
+  transition: transform 0.3s, background-color 0.3s;
+}
+
+.toggle-input:checked + .toggle-slider {
+  background-color: #EF4C3E;
+  border-color: #EF4C3E;
+}
+
+.toggle-input:checked + .toggle-slider::before {
+  transform: translateX(20px);
+  background-color: #FFFFFF;
+}
+
+.toggle-text {
+  font-weight: 500;
+  white-space: nowrap;
+}
+
 .employees-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
 }
 
 .employee-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px;
-  background: #1A1A1A;
-  border-radius: 8px;
-  border: 1px solid #333;
+  padding: 12px 16px;
+  background-color: #1A1A1A;
+  border-radius: 6px;
   transition: all 0.2s;
+  cursor: pointer;
 }
 
 .employee-item:hover {
-  background: #222;
-  border-color: #444;
+  background-color: #2A2A2A;
+  transform: translateY(-1px);
 }
 
 .employee-item.current-employee {
-  border-color: #EF4C3E;
-  background: rgba(239, 76, 62, 0.1);
+  background-color: rgba(40, 151, 209, 0.1);
+  border-left: 3px solid #2897D1;
+}
+
+.employee-item.favourite-employee {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 193, 7, 0.05) 100%);
+  border: 2px solid #FFD700;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.employee-item.favourite-employee::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #FFD700, #FFA500, #FFD700);
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+.employee-item.favourite-employee.current-employee {
+  background: linear-gradient(135deg, rgba(40, 151, 209, 0.15) 0%, rgba(255, 215, 0, 0.1) 100%);
+  border: 2px solid #FFD700;
+  border-left: 3px solid #2897D1;
 }
 
 .employee-info {
@@ -413,4 +506,103 @@
   .time-difference {
     font-size: 9px;
   }
+}
+
+/* Confirmation Popup */
+.confirmation-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.confirmation-popup {
+  background-color: #141414;
+  border-radius: 12px;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  border: 1px solid #1A1A1A;
+  overflow: hidden;
+}
+
+.confirmation-header {
+  padding: 20px 20px 16px 20px;
+  border-bottom: 1px solid #1A1A1A;
+  background-color: #141414;
+}
+
+.confirmation-header h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #FFFFFF;
+  margin: 0;
+}
+
+.confirmation-content {
+  padding: 20px;
+}
+
+.confirmation-content p {
+  font-size: 14px;
+  color: #FFFFFF;
+  margin: 0 0 12px 0;
+  line-height: 1.5;
+}
+
+.confirmation-content strong {
+  color: #EF4C3E;
+  font-weight: 600;
+}
+
+.confirmation-note {
+  font-size: 13px;
+  color: #979797;
+  margin-top: 8px;
+}
+
+.confirmation-actions {
+  display: flex;
+  gap: 12px;
+  padding: 16px 20px 20px 20px;
+  border-top: 1px solid #1A1A1A;
+}
+
+.btn-cancel, .btn-confirm {
+  flex: 1;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.btn-cancel {
+  background-color: #1A1A1A;
+  color: #979797;
+  border: 1px solid #333;
+}
+
+.btn-cancel:hover {
+  background-color: #2A2A2A;
+  color: #FFFFFF;
+}
+
+.btn-confirm {
+  background-color: #EF4C3E;
+  color: #FFFFFF;
+}
+
+.btn-confirm:hover {
+  background-color: #d63e32;
 } 
