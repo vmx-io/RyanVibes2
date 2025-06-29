@@ -65,9 +65,9 @@ interface CalendarDay {
           (change)="onEmployeeChange()"
           class="employee-select"
         >
-          <option value="">Select Employee</option>
+          <option value="">Wybierz pracownika</option>
           <ng-container *ngIf="favouriteEmployees.length">
-            <optgroup label="Favourites">
+            <optgroup label="Ulubieni">
               <option 
                 *ngFor="let emp of favouriteEmployees" 
                 [value]="emp.id"
@@ -77,7 +77,7 @@ interface CalendarDay {
             </optgroup>
           </ng-container>
           <ng-container *ngIf="otherEmployees.length">
-            <optgroup label="Others">
+            <optgroup label="Inni">
               <option 
                 *ngFor="let emp of otherEmployees" 
                 [value]="emp.id"
@@ -91,7 +91,7 @@ interface CalendarDay {
 
       <!-- Month Navigation -->
       <div class="month-navigation">
-        <button class="nav-button" (click)="previousMonth()" aria-label="Previous month">
+        <button class="nav-button" (click)="previousMonth()" aria-label="Poprzedni miesiąc">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M15 18l-6-6 6-6"/>
           </svg>
@@ -99,7 +99,7 @@ interface CalendarDay {
         
         <h1 class="month-title">{{ getMonthYearString() }}</h1>
         
-        <button class="nav-button" (click)="nextMonth()" aria-label="Next month">
+        <button class="nav-button" (click)="nextMonth()" aria-label="Następny miesiąc">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M9 18l6-6-6-6"/>
           </svg>
@@ -151,7 +151,7 @@ interface CalendarDay {
             <line x1="8" y1="2" x2="8" y2="6"/>
             <line x1="3" y1="10" x2="21" y2="10"/>
           </svg>
-          <span>Today</span>
+          <span>Dzisiaj</span>
         </button>
         <button class="tab-item" (click)="openGithub()">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -179,7 +179,7 @@ export class MobileCalendarComponent implements OnInit, OnChanges {
   
   calendarDays: CalendarDay[] = [];
   currentDate = new Date();
-  weekDays = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
+  weekDays = ['PON', 'WT', 'ŚR', 'CZW', 'PT', 'SOB', 'ND'];
   employees: Employee[] = [];
   selectedEmployeeId: string = '';
   selectedEmployee: Employee | null = null;
@@ -362,9 +362,11 @@ export class MobileCalendarComponent implements OnInit, OnChanges {
   }
 
   getMonthYearString(): string {
-    return this.currentDate.toLocaleDateString('en-US', { 
-      month: 'long'
-    });
+    const months = [
+      'Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec',
+      'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień'
+    ];
+    return months[this.currentDate.getMonth()];
   }
 
   previousMonth(): void {

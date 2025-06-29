@@ -20,9 +20,9 @@ import { DeviceService } from '../services/device.service';
           (change)="onEmployeeChange()"
           class="employee-dropdown"
         >
-          <option value="" disabled selected class="placeholder-option">Select an employee</option>
+          <option value="" disabled selected class="placeholder-option">Wybierz pracownika</option>
           <ng-container *ngIf="favouriteEmployees.length">
-            <optgroup label="Favourites">
+            <optgroup label="Ulubieni">
               <option 
                 *ngFor="let employee of favouriteEmployees" 
                 [value]="employee.id"
@@ -32,7 +32,7 @@ import { DeviceService } from '../services/device.service';
             </optgroup>
           </ng-container>
           <ng-container *ngIf="otherEmployees.length">
-            <optgroup label="Others">
+            <optgroup label="Inni">
               <option 
                 *ngFor="let employee of otherEmployees" 
                 [value]="employee.id"
@@ -46,7 +46,7 @@ import { DeviceService } from '../services/device.service';
           *ngIf="selectedEmployee && deviceService.isDesktop()" 
           (click)="goToMobileView()" 
           class="mobile-view-button"
-          title="Mobile View"
+          title="Widok mobilny"
         >
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
@@ -55,8 +55,8 @@ import { DeviceService } from '../services/device.service';
         </button>
       </div>
       <div *ngIf="!employees.length" class="no-data">
-        <p>No employee data available. Please upload a file first.</p>
-        <button (click)="goToHome()" class="btn-primary">Go to Upload</button>
+        <p>Brak danych pracowników. Proszę najpierw przesłać plik.</p>
+        <button (click)="goToHome()" class="btn-primary">Przejdź do przesyłania</button>
       </div>
     </div>
     <div *ngIf="selectedEmployee" class="workbook-container calendar-full-width">

@@ -38,7 +38,7 @@ interface EmployeeShift {
         <!-- Header -->
         <div class="popup-header">
           <h2 class="popup-title">{{ getDayTitle() }}</h2>
-          <button class="close-button" (click)="close()" aria-label="Close">
+          <button class="close-button" (click)="close()" aria-label="Zamknij">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <line x1="18" y1="6" x2="6" y2="18"/>
               <line x1="6" y1="6" x2="18" y2="18"/>
@@ -50,44 +50,44 @@ interface EmployeeShift {
         <div class="popup-scrollable-content">
           <!-- Shift Details Section -->
           <div class="shift-details" *ngIf="day?.shift">
-            <h3 class="section-title">Shift Details</h3>
+            <h3 class="section-title">Szczegóły zmiany</h3>
             <div class="shift-info-grid">
               <div class="info-item">
-                <span class="label">Start Time:</span>
-                <span class="value">{{ day?.shift?.start || 'Not specified' }}</span>
+                <span class="label">Godzina rozpoczęcia:</span>
+                <span class="value">{{ day?.shift?.start || 'Nie określono' }}</span>
               </div>
               <div class="info-item">
-                <span class="label">End Time:</span>
-                <span class="value">{{ day?.shift?.end || 'Not specified' }}</span>
+                <span class="label">Godzina zakończenia:</span>
+                <span class="value">{{ day?.shift?.end || 'Nie określono' }}</span>
               </div>
               <div class="info-item">
-                <span class="label">Total Hours:</span>
+                <span class="label">Łączne godziny:</span>
                 <span class="value">{{ day?.shift?.hours || 0 }}h</span>
               </div>
               <div class="info-item" *ngIf="day?.shift?.isSickLeave">
-                <span class="label">Type:</span>
-                <span class="value shift-type sick-leave">Sick Leave (L4)</span>
+                <span class="label">Typ:</span>
+                <span class="value shift-type sick-leave">Zwolnienie lekarskie (L4)</span>
               </div>
               <div class="info-item" *ngIf="day?.shift?.isTraining">
-                <span class="label">Type:</span>
-                <span class="value shift-type training">Training (SZK)</span>
+                <span class="label">Typ:</span>
+                <span class="value shift-type training">Szkolenie (SZK)</span>
               </div>
               <div class="info-item" *ngIf="day?.shift?.isVacation">
-                <span class="label">Type:</span>
-                <span class="value shift-type vacation">Vacation (URL)</span>
+                <span class="label">Typ:</span>
+                <span class="value shift-type vacation">Urlop (URL)</span>
               </div>
               <div class="info-item" *ngIf="day?.shift?.isNightShift">
-                <span class="label">Type:</span>
-                <span class="value shift-type night-shift">Night Shift (NOC)</span>
+                <span class="label">Typ:</span>
+                <span class="value shift-type night-shift">Zmiana nocna (NOC)</span>
               </div>
             </div>
           </div>
 
           <!-- Time Range Selector -->
           <div class="time-range-section" *ngIf="day?.shift?.start">
-            <h3 class="section-title">Employees Starting Around Same Time</h3>
+            <h3 class="section-title">Pracownicy rozpoczynający o podobnej porze</h3>
             <div class="time-range-selector">
-              <label class="range-label">Time Range:</label>
+              <label class="range-label">Zakres czasowy:</label>
               <div class="range-buttons">
                 <button 
                   *ngFor="let range of timeRanges" 
@@ -99,7 +99,7 @@ interface EmployeeShift {
                 </button>
               </div>
               <div class="custom-range" *ngIf="selectedRange === 'custom'">
-                <label>Custom hours (±):</label>
+                <label>Niestandardowe godziny (±):</label>
                 <input 
                   type="number" 
                   [(ngModel)]="customHours" 
@@ -115,7 +115,7 @@ interface EmployeeShift {
           <!-- Employees List -->
           <div class="employees-section" *ngIf="day?.shift?.start && filteredEmployees.length > 0">
             <div class="employees-header">
-              <h3 class="section-title">Employees ({{ filteredEmployees.length }})</h3>
+              <h3 class="section-title">Pracownicy ({{ filteredEmployees.length }})</h3>
               <div class="sort-toggle">
                 <label class="toggle-label">
                   <input 
@@ -125,7 +125,7 @@ interface EmployeeShift {
                     class="toggle-input"
                   >
                   <span class="toggle-slider"></span>
-                  <span class="toggle-text">Favourites first</span>
+                  <span class="toggle-text">Ulubieni pierwsi</span>
                 </label>
               </div>
             </div>
@@ -153,12 +153,12 @@ interface EmployeeShift {
 
           <!-- No Employees Message -->
           <div class="no-employees" *ngIf="day?.shift?.start && filteredEmployees.length === 0">
-            <p>No other employees starting within the selected time range.</p>
+            <p>Brak innych pracowników rozpoczynających w wybranym zakresie czasowym.</p>
           </div>
 
           <!-- No Shift Message -->
           <div class="no-shift" *ngIf="!day?.shift">
-            <p>No shift scheduled for this day.</p>
+            <p>Brak zaplanowanej zmiany na ten dzień.</p>
           </div>
         </div>
       </div>
@@ -168,15 +168,15 @@ interface EmployeeShift {
     <div class="confirmation-overlay" *ngIf="showSwitchConfirmation">
       <div class="confirmation-popup">
         <div class="confirmation-header">
-          <h3>Switch to Employee Calendar?</h3>
+          <h3>Przełączyć na kalendarz pracownika?</h3>
         </div>
         <div class="confirmation-content">
-          <p>Do you want to switch to <strong>{{ employeeToSwitch?.firstName }} {{ employeeToSwitch?.lastName }}</strong>'s calendar?</p>
-          <p class="confirmation-note">This will close the current view and show their schedule.</p>
+          <p>Czy chcesz przełączyć na kalendarz <strong>{{ employeeToSwitch?.firstName }} {{ employeeToSwitch?.lastName }}</strong>?</p>
+          <p class="confirmation-note">To zamknie obecny widok i pokaże ich harmonogram.</p>
         </div>
         <div class="confirmation-actions">
-          <button class="btn-cancel" (click)="cancelSwitch()">Cancel</button>
-          <button class="btn-confirm" (click)="confirmSwitch()">Switch</button>
+          <button class="btn-cancel" (click)="cancelSwitch()">Anuluj</button>
+          <button class="btn-confirm" (click)="confirmSwitch()">Przełącz</button>
         </div>
       </div>
     </div>
@@ -201,8 +201,8 @@ export class DayPopupComponent implements OnChanges {
     { label: '±3h', value: '3' },
     { label: '±2h', value: '2' },
     { label: '±1h', value: '1' },
-    { label: 'Exact', value: '0' },
-    { label: 'Custom', value: 'custom' }
+    { label: 'Dokładnie', value: '0' },
+    { label: 'Niestandardowe', value: 'custom' }
   ];
 
   constructor(
@@ -229,12 +229,23 @@ export class DayPopupComponent implements OnChanges {
 
   getDayTitle(): string {
     if (!this.day) return '';
-    return this.day.date.toLocaleDateString('en-US', { 
-      weekday: 'long', 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
-    });
+    
+    const weekdays = [
+      'Niedziela', 'Poniedziałek', 'Wtorek', 'Środa', 
+      'Czwartek', 'Piątek', 'Sobota'
+    ];
+    
+    const months = [
+      'stycznia', 'lutego', 'marca', 'kwietnia', 'maja', 'czerwca',
+      'lipca', 'sierpnia', 'września', 'października', 'listopada', 'grudnia'
+    ];
+    
+    const weekday = weekdays[this.day.date.getDay()];
+    const day = this.day.date.getDate();
+    const month = months[this.day.date.getMonth()];
+    const year = this.day.date.getFullYear();
+    
+    return `${weekday}, ${day} ${month} ${year}`;
   }
 
   selectTimeRange(range: string): void {
@@ -307,7 +318,7 @@ export class DayPopupComponent implements OnChanges {
   }
 
   getTimeDifferenceText(difference: number): string {
-    if (difference === 0) return 'Same time';
+    if (difference === 0) return 'Ten sam czas';
     const absDiff = Math.abs(difference);
     const hours = Math.floor(absDiff);
     const minutes = Math.round((absDiff - hours) * 60);
