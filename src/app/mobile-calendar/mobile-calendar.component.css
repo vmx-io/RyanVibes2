@@ -11,6 +11,7 @@
   overflow-x: hidden;
   box-sizing: border-box;
   margin: 0 auto; /* Center on desktop */
+  position: relative;
 }
 
 /* Desktop constraint */
@@ -40,6 +41,22 @@ body {
   box-shadow: 0 1px 0 rgba(255,255,255,0.04);
   width: 100%;
   box-sizing: border-box;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background-color: #000000;
+  padding: 0 16px;
+}
+
+/* Desktop constraint for header */
+@media (min-width: 801px) {
+  .calendar-header {
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 800px;
+  }
 }
 
 .back-button {
@@ -118,7 +135,7 @@ body {
 
 /* Employee Selector */
 .employee-selector {
-  margin: 16px 0;
+  margin: 104px 0 16px 0; /* 88px header height + 16px margin */
   width: 100%;
   box-sizing: border-box;
 }

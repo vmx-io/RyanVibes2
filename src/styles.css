@@ -6,4 +6,7 @@ html, body {
   height: 100%;
   width: 100%;
   box-sizing: border-box;
+  background-color: #000000;
+  color: #FFFFFF;
+  font-family: 'SF Pro', system-ui, -apple-system, Helvetica, Arial, sans-serif;
 }
