@@ -24,6 +24,7 @@
   align-items: center;
   justify-content: center;
   width: 100%;
+  position: relative;
 }
 .employee-dropdown {
   width: 100%;
@@ -55,6 +56,35 @@
   color: #aaa;
   text-align: center;
 }
+
+.mobile-view-button {
+  position: absolute;
+  right: 0;
+  top: 0;
+  background: linear-gradient(90deg, #22c1c3, #fdba2d);
+  border: none;
+  border-radius: 8px;
+  padding: 8px;
+  cursor: pointer;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px 0 rgba(34,193,195,0.08);
+}
+
+.mobile-view-button:hover {
+  background: linear-gradient(90deg, #fdba2d, #22c1c3);
+  box-shadow: 0 4px 16px 0 rgba(34,193,195,0.12);
+  transform: translateY(-1px);
+}
+
+.mobile-view-button svg {
+  width: 20px;
+  height: 20px;
+}
+
 .no-data {
   text-align: center;
   padding: 2rem 0 0 0;
@@ -91,6 +121,13 @@
     max-width: 100%;
     font-size: 1rem;
     padding: 0.8rem 1rem;
+  }
+  .mobile-view-button {
+    position: static;
+    margin-top: 8px;
+    width: 100%;
+    max-width: 340px;
+    padding: 12px;
   }
 }
 .workbook-container.calendar-full-width {

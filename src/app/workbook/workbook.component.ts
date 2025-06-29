@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { EmployeeService, Employee } from '../services/employee.service';
 import { CalendarComponent } from '../calendar/calendar.component';
 import { CookieService } from '../cookie.service';
+import { DeviceService } from '../services/device.service';
 
 @Component({
   selector: 'app-workbook',
@@ -41,6 +42,17 @@ import { CookieService } from '../cookie.service';
             </optgroup>
           </ng-container>
         </select>
+        <button 
+          *ngIf="selectedEmployee && deviceService.isDesktop()" 
+          (click)="goToMobileView()" 
+          class="mobile-view-button"
+          title="Mobile View"
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+            <line x1="12" y1="18" x2="12.01" y2="18"/>
+          </svg>
+        </button>
       </div>
       <div *ngIf="!employees.length" class="no-data">
         <p>No employee data available. Please upload a file first.</p>
@@ -65,7 +77,7 @@ export class WorkbookComponent implements OnInit {
   employees: Employee[] = [];
   selectedEmployeeId: string = '';
   selectedEmployee: Employee | null = null;
-  favouriteIds: string[] = [];
+  favouriteNames: string[] = [];
   favouriteEmployees: Employee[] = [];
   otherEmployees: Employee[] = [];
   scheduleMonth: number | null = null;
@@ -74,31 +86,45 @@ export class WorkbookComponent implements OnInit {
   constructor(
     private employeeService: EmployeeService,
     private router: Router,
-    public cookieService: CookieService
+    public cookieService: CookieService,
+    public deviceService: DeviceService
   ) {}
 
   ngOnInit(): void {
-    this.favouriteIds = this.getFavouritesFromCookie();
+    this.favouriteNames = this.getFavouritesFromCookie();
     this.employeeService.getEmployeesObservable().subscribe(employees => {
       this.employees = employees;
       if (employees.length === 0) {
         // If no employees, redirect to home
         this.router.navigate(['/']);
+      } else {
+        this.splitEmployees();
+        this.scheduleMonth = this.employeeService.getScheduleMonth();
+        this.scheduleYear = this.employeeService.getScheduleYear();
+        
+        // Always redirect to mobile view after file upload
+        this.router.navigate(['/mobile-calendar']);
       }
-      this.splitEmployees();
-      this.scheduleMonth = this.employeeService.getScheduleMonth();
-      this.scheduleYear = this.employeeService.getScheduleYear();
     });
   }
 
+  getEmployeeFullName(employee: Employee): string {
+    return `${employee.firstName} ${employee.lastName}`;
+  }
+
   splitEmployees(): void {
-    this.favouriteEmployees = this.employees.filter(e => this.favouriteIds.includes(e.id));
-    this.otherEmployees = this.employees.filter(e => !this.favouriteIds.includes(e.id));
+    this.favouriteEmployees = this.employees.filter(e => this.favouriteNames.includes(this.getEmployeeFullName(e)));
+    this.otherEmployees = this.employees.filter(e => !this.favouriteNames.includes(this.getEmployeeFullName(e)));
   }
 
   onEmployeeChange(): void {
     if (this.selectedEmployeeId) {
       this.selectedEmployee = this.employees.find(emp => emp.id === this.selectedEmployeeId) || null;
+      
+      // Always redirect to mobile view when employee is selected
+      if (this.selectedEmployee) {
+        this.router.navigate(['/mobile-calendar']);
+      }
     } else {
       this.selectedEmployee = null;
     }
@@ -108,20 +134,28 @@ export class WorkbookComponent implements OnInit {
     this.router.navigate(['/']);
   }
 
+  goToMobileView(): void {
+    this.router.navigate(['/mobile-calendar']);
+  }
+
   toggleFavourite(): void {
     if (!this.selectedEmployee) return;
-    const id = this.selectedEmployee.id;
-    if (this.isFavourite(id)) {
-      this.favouriteIds = this.favouriteIds.filter(fid => fid !== id);
+    
+    const employeeName = this.getEmployeeFullName(this.selectedEmployee);
+    
+    if (this.favouriteNames.includes(employeeName)) {
+      this.favouriteNames = this.favouriteNames.filter(name => name !== employeeName);
     } else {
-      this.favouriteIds.push(id);
+      this.favouriteNames.push(employeeName);
     }
-    this.setFavouritesToCookie(this.favouriteIds);
+    this.setFavouritesToCookie(this.favouriteNames);
     this.splitEmployees();
   }
 
   isFavourite(id: string): boolean {
-    return this.favouriteIds.includes(id);
+    const employee = this.employees.find(emp => emp.id === id);
+    if (!employee) return false;
+    return this.favouriteNames.includes(this.getEmployeeFullName(employee));
   }
 
   getFavouritesFromCookie(): string[] {
@@ -134,7 +168,7 @@ export class WorkbookComponent implements OnInit {
     }
   }
 
-  setFavouritesToCookie(ids: string[]): void {
-    this.cookieService.set('favouriteEmployees', JSON.stringify(ids), 365);
+  setFavouritesToCookie(names: string[]): void {
+    this.cookieService.set('favouriteEmployees', JSON.stringify(names), 365);
   }
 } 

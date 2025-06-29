@@ -1,0 +1,108 @@
+{
+    "meta": {
+      "profileName": "mobileCalendar_darkMode",
+      "description": "Design-token profile distilled from a dark-theme monthly-calendar UI screenshot. 100 % visual; no business or user data."
+    },
+  
+    "theme": "dark",
+  
+    "colors": {
+      "background/primary": "#000000",
+      "background/elevated": "#141414",
+      "text/primary": "#FFFFFF",
+      "text/secondary": "#979797",
+      "accent/primary": "#EF4C3E",
+      "accent/secondary": "#2897D1",
+      "divider/subtle": "#1A1A1A"
+    },
+  
+    "typography": {
+      "fontFamily": "SF Pro, system-ui, -apple-system, Helvetica, Arial, sans-serif",
+      "title/large":   { "size": 32, "weight": 700, "lineHeight": 38, "letterSpacing": -0.5 },
+      "label/weekday": { "size": 13, "weight": 500, "transform": "uppercase", "letterSpacing": 0.4 },
+      "number/date":   { "size": 17, "weight": 400 },
+      "number/date-selected": { "inherits": "number/date", "weight": 600 },
+      "label/tab":     { "size": 13, "weight": 400 }
+    },
+  
+    "spacing": {
+      "screen/paddingHorizontal": 16,
+      "header/height": 88,
+      "tabBar/height": 72,
+      "calendar/rowGap": 24,
+      "calendar/columnGap": 0
+    },
+  
+    "shapes": {
+      "pill/badge":   { "borderRadius": 12 },
+      "circle/selectedDate": { "diameter": 44, "borderRadius": "50%" }
+    },
+  
+    "iconography": {
+      "defaultSize": 24,
+      "strokeWidth": 2,
+      "color/active": "{colors.accent/primary}",
+      "color/inactive": "{colors.text/primary}"
+    },
+  
+    "layout": {
+      "header": {
+        "type": "horizontalStack",
+        "items": [
+          "button/back",
+          "label/yearTiny",
+          "spacer/flex",
+          "button/viewToggle",
+          "button/search",
+          "button/add"
+        ]
+      },
+  
+      "weekdayHeader": {
+        "type": "sevenColumnGrid",
+        "textStyle": "{typography.label/weekday}",
+        "align": "center"
+      },
+  
+      "calendarGrid": {
+        "type": "sevenColumnGrid",
+        "rows": "variable (5-6)",
+        "cell": {
+          "verticalAlign": "center",
+          "horizontalAlign": "center",
+          "textStyle": "{typography.number/date}"
+        },
+        "rowSeparator": { "color": "{colors.divider/subtle}", "thickness": 1 },
+        "stateStyles": {
+          "selected":   { "background": "{colors.accent/primary}", "text": "{colors.text/primary}" },
+          "inactive":   { "text": "{colors.text/secondary}" }
+        }
+      },
+  
+      "eventBadge": {
+        "background": "{colors.accent/secondary}",
+        "text": "{colors.text/primary}",
+        "shape": "{shapes.pill/badge}",
+        "paddingHorizontal": 8,
+        "paddingVertical": 2
+      },
+  
+      "tabBar": {
+        "type": "bottomNavigation",
+        "height": "{spacing.tabBar/height}",
+        "background": "{colors.background/primary}",
+        "itemOrder": ["Today", "Calendars", "Inbox"],
+        "activeTint": "{colors.accent/primary}",
+        "inactiveTint": "{colors.text/primary}"
+      }
+    },
+  
+    "componentStates": {
+      "iconButton/active":   { "tint": "{colors.accent/primary}" },
+      "iconButton/inactive": { "tint": "{colors.text/primary}" }
+    },
+  
+    "effects": {
+      "header/shadow": "0 1px 0 rgba(255,255,255,0.04)"
+    }
+  } 
